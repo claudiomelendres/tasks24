@@ -1,0 +1,36 @@
+<div class="container">
+  <h1>TODO app</h1>
+  <h2>{{welcome}}</h2>
+
+  <ul>
+    <li *ngFor="let todo of todos">
+      {{todo}}
+    </li>
+  </ul>
+  <hr />
+  <h2>{{ 'hola'.repeat(4) }}</h2>
+
+  <p> hi {{name()}} {{age}}</p>
+  <hr />
+
+  <input type="text" [value]="name()" /> <br />
+  <button [disabled]="disabled">Click me</button> <br />
+
+  <p>Change: </p>
+  <input type="text" [value]="person.name" (change)="changeHandler($event)" /> <br />
+
+  <p>keyDown: </p>
+  <input type="text" [value]="person.name" (keydown)="keyDownHandler($event)" /> <br />
+
+  <button (click)="changeName()">Change name</button> <br />
+
+  <hr />
+
+  <h1>Signals</h1>
+  <ul>
+    <p>total: {{ tasks().length }}</p>
+    <li *ngFor="let task of tasks(); index as i">
+      {{i}} - {{task}}
+    </li>
+  </ul>
+</div>
