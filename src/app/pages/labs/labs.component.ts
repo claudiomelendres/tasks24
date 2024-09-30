@@ -18,11 +18,11 @@ export class LabsComponent {
 
   disabled = false;
 
-  person = {
-    name: 'John',
+  person = signal({
+    name: 'claudio',
     lastName: 'Doe',
     age: 30
-  };
+  });
 
   changeName() {
     // this.name = 'React';

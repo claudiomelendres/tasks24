@@ -17,10 +17,10 @@
   <button [disabled]="disabled">Click me</button> <br />
 
   <p>Change: </p>
-  <input type="text" [value]="person.name" (change)="changeHandler($event)" /> <br />
+  <input type="text" [value]="person().name" (change)="changeHandler($event)" /> <br />
 
   <p>keyDown: </p>
-  <input type="text" [value]="person.name" (keydown)="keyDownHandler($event)" /> <br />
+  <input type="text" [value]="person().name" (keydown)="keyDownHandler($event)" /> <br />
 
   <button (click)="changeName()">Change name</button> <br />
 
@@ -33,4 +33,12 @@
       {{i}} - {{task}}
     </li>
   </ul>
+
+  <div *ngIf="person().name === 'jhon' && person().age >18; else elseBlock">
+    <h1>Hi Jhon</h1>
+  </div>
+  <ng-template #elseBlock>
+    <h1>Hi {{person().name}}</h1>
+  </ng-template>
 </div>
+
