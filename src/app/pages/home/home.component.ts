@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Task } from './../../models/task.model';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -24,11 +25,20 @@ export class HomeComponent {
 
   ]);
 
-  changeHandler(event: Event) {
-    console.log('changeHandler');
-    const input = event.target as HTMLInputElement;
-    const newTitle = input.value;
-    this.addTask(newTitle);
+  newTaskCtrl = new FormControl('', {
+    nonNullable: true,
+    validators: [
+      Validators.required,
+    ],
+
+  });
+
+  changeHandler() {
+    if (this.newTaskCtrl.valid && this.newTaskCtrl.value.trim()!=='') {
+      const newTitle = this.newTaskCtrl.value.trim();
+      this.addTask(newTitle);
+      this.newTaskCtrl.reset();
+    }
   }
 
   addTask(title: string){
@@ -52,6 +62,41 @@ export class HomeComponent {
           return {
             ...task,
             completed: !task.completed
+          }
+        }
+        return task
+      })
+    })
+  }
+
+  updateTaskEditingMode(index: number)
+  {
+    this.tasks.update((tasks) => {
+      return tasks.map((task, position) => {
+        if(position === index) {
+          return {
+            ...task,
+            editing: true
+          }
+        }
+      return {// solo se puede editar un elemento a la vez
+        ...task,
+        editing: false
+      };
+      })
+    })
+  }
+
+  updateTaskText(index: number, event: Event){
+    const input = event.target as HTMLInputElement;
+    const newTitle = input.value.trim();
+    this.tasks.update((tasks) => {
+      return tasks.map((task, position) => {
+        if(position === index) {
+          return {
+            ...task,
+            title: newTitle,
+            editing: false
           }
         }
         return task

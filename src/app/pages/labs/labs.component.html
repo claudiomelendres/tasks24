@@ -34,11 +34,45 @@
     </li>
   </ul>
 
+  <input type="number" [value]="person().age" (change)="changeAge($event)" /> <br />
   <div *ngIf="person().name === 'jhon' && person().age >18; else elseBlock">
-    <h1>Hi Jhon</h1>
+    <h1>Hi Jhon you are > 18 </h1>
   </div>
   <ng-template #elseBlock>
-    <h1>Hi {{person().name}}</h1>
+    <h1>Hi {{person().name}} you are young</h1>
   </ng-template>
+
+  <hr />
+
+  <input type="text" [value]="person().name" (change)="changeNamePerson($event)" /> <br />
+  <div [ngSwitch]="person().name">
+    <p *ngSwitchCase="'jhon'">Hi Jhon</p>
+    <p *ngSwitchCase="'jane'">Hi Jane</p>
+    <p *ngSwitchDefault>Hi {{person().name}}</p>
+  </div>
+
+  <hr />
+
+  <input type="color" [formControl] = "colorCtrl" >
+  <p>color: {{colorCtrl.value}}</p>
+  <svg>
+    <g>
+      <rect [attr.fill]="colorCtrl.value" width="100" height="100"></rect>
+    </g>
+  </svg>
+
+  <hr />
+  <input type="number" [formControl]="widthCtrl" />
+  <span class="box" [style.width.px]="widthCtrl.value" ></span>
+  <hr />
+  <p>
+    <input type="text" [formControl]="nameCtrl" /> <br />
+    <span class="message-error" [class.show]="nameCtrl.invalid && nameCtrl.touched">Nombre  invalido</span>
+  </p>
+  <p>
+    <input type="text"> <br />
+  </p>
+
+
 </div>
 

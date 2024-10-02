@@ -2,3 +2,21 @@
     margin-top: 20px;
     padding: 20px;
 }
+
+.box {
+  height: 10px;
+  display: block;
+  background-color: red;
+}
+
+.message-error {
+  background-color: red;
+  color: white;
+  /* padding: 2rem; */
+  opacity: 0;
+  transition: all linear 0.5s;
+}
+
+.message-error.show {
+  opacity: 1;
+}
