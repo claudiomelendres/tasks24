@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal, effect } from '@angular/core';
 import { Task } from './../../models/task.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -12,18 +12,24 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class HomeComponent {
   tasks = signal<Task[]>([
-    {
-      id: Date.now(),
-      title: 'Crear proyecto',
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: 'llenar formularios',
-      completed: false,
-    },
+
 
   ]);
+
+  filter = signal<'all'|'pending'|'completed'>('all');
+
+  // deriva lo que es tasks
+  taskByFilter = computed(() => {
+    const tasks = this.tasks();
+    const filter = this.filter();
+    if (filter === 'pending') {
+      return tasks.filter((task) => !task.completed);
+    }
+    if (filter === 'completed') {
+      return tasks.filter((task) => task.completed);
+    }
+   return tasks;
+  });
 
   newTaskCtrl = new FormControl('', {
     nonNullable: true,
@@ -32,6 +38,22 @@ export class HomeComponent {
     ],
 
   });
+
+  constructor() {
+    effect(() => {
+      const tasks = this.tasks();
+      console.log('run effect tasks:', tasks);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    });
+  }
+
+  ngOnInit(): void {
+    const tasksStorage = localStorage.getItem('tasks');
+    if (tasksStorage) {
+      this.tasks.set(JSON.parse(tasksStorage));
+    }
+  }
+
 
   changeHandler() {
     if (this.newTaskCtrl.valid && this.newTaskCtrl.value.trim()!=='') {
@@ -102,6 +124,10 @@ export class HomeComponent {
         return task
       })
     })
+  }
+
+  changeFilter(filter: 'all'|'pending'|'completed'){
+    this.filter.set(filter);
   }
 
 }
