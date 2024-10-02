@@ -22,54 +22,80 @@
     </pre> -->
     <section class="main">
       <ul class="todo-list">
-        <li (dblclick) = "updateTaskEditingMode(i)"
-        *ngFor="let task of taskByFilter(); index as i"
-        [class.completed]="task.completed"
-        [class.editing]="task.editing"
+        @for (task of taskByFilter(); track task; let i = $index) {
+        <li
+          (dblclick)="updateTaskEditingMode(i)"
+          [class.completed]="task.completed"
+          [class.editing]="task.editing"
         >
           <div class="view">
-            <input class="toggle" type="checkbox" [checked]="task.completed" (change)="updateTask(i)" />
+            <input
+              class="toggle"
+              type="checkbox"
+              [checked]="task.completed"
+              (change)="updateTask(i)"
+            />
             <label>{{ task.title }}</label>
             <button class="destroy" (click)="deleteTask(i)"></button>
           </div>
-          <input class="edit" (keydown.enter)="updateTaskText(i,$event)" [value]="task.title" />
+          <input
+            class="edit"
+            (keydown.enter)="updateTaskText(i, $event)"
+            [value]="task.title"
+          />
         </li>
+        }
         <!-- <li class="completed">
-          <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label>Buy a unicorn</label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="Buy a unicorn" />
-        </li> -->
+        <div class="view">
+          <input class="toggle" type="checkbox" />
+          <label>Buy a unicorn</label>
+          <button class="destroy"></button>
+        </div>
+        <input class="edit" value="Buy a unicorn" />
+      </li> -->
         <!-- <li class="editing">
-          <div class="view">
-            <input class="toggle" type="checkbox" />
-            <label>Make dishes</label>
-            <button class="destroy"></button>
-          </div>
-          <input class="edit" value="Make dishes" />
-        </li> -->
+      <div class="view">
+        <input class="toggle" type="checkbox" />
+        <label>Make dishes</label>
+        <button class="destroy"></button>
+      </div>
+      <input class="edit" value="Make dishes" />
+    </li> -->
       </ul>
     </section>
     <!-- This footer should be hidden by default and shown when there are todos -->
-    <footer class="footer" *ngIf="tasks().length>0">
+    @if (tasks().length>0) {
+    <footer class="footer">
       <!-- This should be `0 items left` by default -->
-      <span class="todo-count"><strong>{{ taskByFilter().length }}</strong> {{ taskByFilter().length <= 1 ? "item" : "items" }} left</span>
+      <span class="todo-count"
+        ><strong>{{ taskByFilter().length }}</strong>
+        {{ taskByFilter().length <= 1 ? "item" : "items" }} left</span
+      >
       <!-- Remove this if you don't implement routing -->
       <ul class="filters">
         <li>
-          <a (click)="changeFilter('all')" [class.selected]="filter()== 'all'">All</a>
+          <a (click)="changeFilter('all')" [class.selected]="filter() == 'all'"
+            >All</a
+          >
         </li>
         <li>
-          <a (click)="changeFilter('pending')" [class.selected]="filter()== 'pending'">Pending</a>
+          <a
+            (click)="changeFilter('pending')"
+            [class.selected]="filter() == 'pending'"
+            >Pending</a
+          >
         </li>
         <li>
-          <a (click)="changeFilter('completed')" [class.selected]="filter()== 'completed'">Completed</a>
+          <a
+            (click)="changeFilter('completed')"
+            [class.selected]="filter() == 'completed'"
+            >Completed</a
+          >
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->
       <button class="clear-completed">Clear completed</button>
     </footer>
+    }
   </div>
 </section>
